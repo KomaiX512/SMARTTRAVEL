@@ -1,6 +1,59 @@
 {% extends 'base/base.html' %}
+{% load static %}
 
 {% block title %}Contact Us - Smart Travel{% endblock %}
+
+{% block extra_css %}
+<style>
+    .team-member {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border-radius: 15px;
+        overflow: hidden;
+    }
+    
+    .team-member:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+    }
+    
+    .team-img {
+        height: 280px;
+        object-fit: cover;
+    }
+    
+    .team-social {
+        position: absolute;
+        bottom: -40px;
+        left: 0;
+        right: 0;
+        opacity: 0;
+        transition: all 0.3s ease;
+    }
+    
+    .team-member:hover .team-social {
+        bottom: 20px;
+        opacity: 1;
+    }
+    
+    .social-btn {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #fff;
+        margin: 0 5px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        transition: all 0.3s ease;
+    }
+    
+    .social-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 15px rgba(0,0,0,0.15);
+    }
+</style>
+{% endblock %}
 
 {% block content %}
 <div class="container py-5">
@@ -41,6 +94,79 @@
                             <button type="submit" class="btn btn-primary btn-lg">Send Message</button>
                         </div>
                     </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Team Section -->
+    <h2 class="text-center my-5">Meet Our Team</h2>
+    <div class="row mb-5">
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card team-member h-100 border-0 shadow-sm">
+                <img src="{% static 'img/team/ceo.jpg' %}" class="card-img-top team-img" alt="CEO Mahreen">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Mahreen</h5>
+                    <p class="text-primary fw-bold">CEO</p>
+                    <p class="card-text">With over 15 years in the travel industry, Mahreen's vision is to make personalized travel accessible to everyone.</p>
+                </div>
+                <div class="team-social text-center">
+                    <div class="d-flex justify-content-center">
+                        <a href="#" class="social-btn"><i class="fab fa-linkedin-in text-primary"></i></a>
+                        <a href="#" class="social-btn"><i class="fab fa-twitter text-primary"></i></a>
+                        <a href="#" class="social-btn"><i class="fas fa-envelope text-primary"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card team-member h-100 border-0 shadow-sm">
+                <img src="{% static 'img/team/cto.jpg' %}" class="card-img-top team-img" alt="CTO Javid">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Javid</h5>
+                    <p class="text-primary fw-bold">CTO</p>
+                    <p class="card-text">Javid brings cutting-edge technology expertise to create seamless travel planning experiences.</p>
+                </div>
+                <div class="team-social text-center">
+                    <div class="d-flex justify-content-center">
+                        <a href="#" class="social-btn"><i class="fab fa-linkedin-in text-primary"></i></a>
+                        <a href="#" class="social-btn"><i class="fab fa-github text-primary"></i></a>
+                        <a href="#" class="social-btn"><i class="fas fa-envelope text-primary"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card team-member h-100 border-0 shadow-sm">
+                <img src="{% static 'img/team/customer-experience.jpg' %}" class="card-img-top team-img" alt="Head of Customer Experience Fatima">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Fatima</h5>
+                    <p class="text-primary fw-bold">Head of Customer Experience</p>
+                    <p class="card-text">Fatima ensures every traveler enjoys a memorable and stress-free journey from planning to return.</p>
+                </div>
+                <div class="team-social text-center">
+                    <div class="d-flex justify-content-center">
+                        <a href="#" class="social-btn"><i class="fab fa-linkedin-in text-primary"></i></a>
+                        <a href="#" class="social-btn"><i class="fab fa-twitter text-primary"></i></a>
+                        <a href="#" class="social-btn"><i class="fas fa-envelope text-primary"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card team-member h-100 border-0 shadow-sm">
+                <img src="{% static 'img/team/travel-officer.jpg' %}" class="card-img-top team-img" alt="Chief Travel Officer Kamran">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Kamran</h5>
+                    <p class="text-primary fw-bold">Chief Travel Officer</p>
+                    <p class="card-text">Having explored over 50 countries, Kamran brings authentic destination expertise to curate exceptional travel experiences.</p>
+                </div>
+                <div class="team-social text-center">
+                    <div class="d-flex justify-content-center">
+                        <a href="#" class="social-btn"><i class="fab fa-linkedin-in text-primary"></i></a>
+                        <a href="#" class="social-btn"><i class="fab fa-instagram text-primary"></i></a>
+                        <a href="#" class="social-btn"><i class="fas fa-envelope text-primary"></i></a>
+                    </div>
                 </div>
             </div>
         </div>

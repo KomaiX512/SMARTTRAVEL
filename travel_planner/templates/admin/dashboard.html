@@ -1,0 +1,161 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block title %}Admin Dashboard - Smart Travel{% endblock %}
+
+{% block extra_css %}
+<style>
+    .dashboard-card {
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        transition: all 0.3s ease;
+    }
+    
+    .dashboard-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    }
+    
+    .stats-card {
+        background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
+        color: white;
+    }
+    
+    .table-card {
+        overflow: hidden;
+    }
+    
+    .app-title {
+        background-color: #f8f9fa;
+        padding: 10px 15px;
+        margin-bottom: 0;
+        border-bottom: 1px solid #dee2e6;
+        font-weight: 600;
+        color: #212529;
+    }
+    
+    .model-table {
+        margin-bottom: 0;
+    }
+    
+    .model-table th {
+        background-color: #f8f9fa;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Admin Dashboard</h1>
+        <a href="/admin/" class="btn btn-primary">
+            <i class="fas fa-cogs me-2"></i>Django Admin
+        </a>
+    </div>
+    
+    <!-- Stats Cards -->
+    <div class="row mb-4">
+        <div class="col-md-3 mb-3">
+            <div class="card dashboard-card stats-card">
+                <div class="card-body text-center">
+                    <i class="fas fa-map-marked-alt fa-3x mb-3"></i>
+                    <h2>{{ total_destinations }}</h2>
+                    <p class="mb-0">Destinations</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card dashboard-card stats-card">
+                <div class="card-body text-center">
+                    <i class="fas fa-users fa-3x mb-3"></i>
+                    <h2>{{ total_users }}</h2>
+                    <p class="mb-0">Users</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card dashboard-card stats-card">
+                <div class="card-body text-center">
+                    <i class="fas fa-suitcase fa-3x mb-3"></i>
+                    <h2>{{ total_trips }}</h2>
+                    <p class="mb-0">Trips</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card dashboard-card stats-card">
+                <div class="card-body text-center">
+                    <i class="fas fa-star fa-3x mb-3"></i>
+                    <h2>{{ total_reviews }}</h2>
+                    <p class="mb-0">Reviews</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Database Tables -->
+    <h2 class="mb-4">Database Tables</h2>
+    
+    <div class="row">
+        {% for app in app_models %}
+        <div class="col-md-6 mb-4">
+            <div class="card dashboard-card table-card">
+                <h5 class="app-title">{{ app.name }}</h5>
+                <div class="table-responsive">
+                    <table class="table table-striped model-table">
+                        <thead>
+                            <tr>
+                                <th>Model</th>
+                                <th>Record Count</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for model in app.models %}
+                            <tr>
+                                <td>{{ model.name }}</td>
+                                <td>{{ model.count }}</td>
+                                <td>
+                                    <a href="{{ model.url }}" class="btn btn-sm btn-outline-primary">
+                                        <i class="fas fa-external-link-alt me-1"></i>View
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    
+    <!-- Admin Actions Card -->
+    <div class="card dashboard-card mt-4">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">
+                <i class="fas fa-tools me-2"></i>Admin Actions
+            </h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <a href="/admin/auth/user/" class="btn btn-outline-primary w-100">
+                        <i class="fas fa-user-shield me-2"></i>Manage Users
+                    </a>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <a href="/admin/destinations/destination/" class="btn btn-outline-primary w-100">
+                        <i class="fas fa-map-marked me-2"></i>Manage Destinations
+                    </a>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <a href="/admin/bookings/trip/" class="btn btn-outline-primary w-100">
+                        <i class="fas fa-suitcase me-2"></i>Manage Trips
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

@@ -42,7 +42,7 @@
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/trips/"><i class="fas fa-suitcase me-1"></i>My Trips</a>
+                        <a class="nav-link" href="{% url 'trips:trip_list' %}"><i class="fas fa-suitcase me-1"></i>My Trips</a>
                     </li>
                 </ul>
                 <ul class="navbar-nav">
@@ -54,16 +54,21 @@
                         <ul class="dropdown-menu dropdown-menu-end">
                             <li><a class="dropdown-item" href="{% url 'users:profile' %}"><i class="fas fa-id-card me-1"></i>Profile</a></li>
                             <li><a class="dropdown-item" href="{% url 'users:preferences' %}"><i class="fas fa-sliders-h me-1"></i>Preferences</a></li>
+                            {% if user.is_superuser %}
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="{% url 'admin_dashboard' %}"><i class="fas fa-chart-line me-1"></i>Admin Dashboard</a></li>
+                            <li><a class="dropdown-item" href="/admin/"><i class="fas fa-cogs me-1"></i>Django Admin</a></li>
+                            {% endif %}
                             <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item" href="{% url 'users:logout' %}"><i class="fas fa-sign-out-alt me-1"></i>Logout</a></li>
                         </ul>
                     </li>
                     {% else %}
                     <li class="nav-item">
-                        <a class="nav-link" href="/login/"><i class="fas fa-sign-in-alt me-1"></i>Login</a>
+                        <a class="nav-link" href="{% url 'users:login' %}"><i class="fas fa-sign-in-alt me-1"></i>Login</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/register/"><i class="fas fa-user-plus me-1"></i>Register</a>
+                        <a class="nav-link" href="{% url 'users:register' %}"><i class="fas fa-user-plus me-1"></i>Register</a>
                     </li>
                     {% endif %}
                 </ul>
@@ -100,10 +105,10 @@
                 <div class="col-md-4">
                     <h5>Quick Links</h5>
                     <ul class="list-unstyled">
-                        <li><a href="/" class="text-white">Home</a></li>
-                        <li><a href="/destinations/" class="text-white">Destinations</a></li>
-                        <li><a href="/about/" class="text-white">About Us</a></li>
-                        <li><a href="/contact/" class="text-white">Contact</a></li>
+                        <li><a href="{% url 'home' %}" class="text-white">Home</a></li>
+                        <li><a href="{% url 'destinations:list' %}" class="text-white">Destinations</a></li>
+                        <li><a href="{% url 'about' %}" class="text-white">About Us</a></li>
+                        <li><a href="{% url 'contact' %}" class="text-white">Contact</a></li>
                     </ul>
                 </div>
                 <div class="col-md-4">

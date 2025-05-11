@@ -23,6 +23,8 @@ from . import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    # Admin dashboard
+    path('admin-dashboard/', views.admin_dashboard, name='admin_dashboard'),
     # Home page
     path('', TemplateView.as_view(template_name='base/home.html'), name='home'),
     # Static pages
@@ -31,7 +33,7 @@ urlpatterns = [
     # App URLs
     path('users/', include('users.urls')),
     path('destinations/', include('destinations.urls')),
-    path('trips/', include('bookings.urls')),
+    path('trips/', include('bookings.urls', namespace='trips')),
     path('reviews/', include('reviews.urls')),
     # Auth URLs
     path('login/', views.redirect_to_login, name='login'),

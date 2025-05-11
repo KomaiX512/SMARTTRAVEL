@@ -26,7 +26,14 @@ SECRET_KEY = 'django-insecure-*osn=(y&h(kin=p@9!s(&n8q8+6(7qew0-q932+k07#e8!c^!v
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
+
+# CSRF settings for external access
+CSRF_TRUSTED_ORIGINS = [
+    'http://localhost:8000',
+    'https://*.ngrok-free.app',
+    'http://*.ngrok-free.app',
+]
 
 
 # Application definition
@@ -39,10 +46,14 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # Custom apps
+    'travel_planner',
     'users',
     'destinations',
     'bookings',
     'reviews',
+    # Third-party apps for real-time functionality
+    'channels',
+    'django_eventstream',
 ]
 
 MIDDLEWARE = [
@@ -53,6 +64,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'users.middleware.UserActivityMiddleware',
 ]
 
 ROOT_URLCONF = 'travel_planner.urls'
@@ -74,29 +86,39 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'travel_planner.wsgi.application'
+ASGI_APPLICATION = 'travel_planner.routing.application'
 
+# Channel layers for real-time functionality
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels.layers.InMemoryChannelLayer',
+    },
+}
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
-
-# PostgreSQL configuration - commented out for now
+# SQLite configuration - commented out
 # DATABASES = {
 #     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'travel_planner',
-#         'USER': 'postgres',
-#         'PASSWORD': 'postgres',  # Change this to a secure password in production
-#         'HOST': 'localhost',
-#         'PORT': '5432',
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
 #     }
 # }
+
+# PostgreSQL configuration
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'travel_planner',
+        'USER': 'postgres',
+        'PASSWORD': 'postgres',  # In production, use environment variables
+        'HOST': 'localhost',
+        'PORT': '5432',
+        'CONN_MAX_AGE': 60,      # Keep connections alive for 60 seconds
+        'OPTIONS': {'sslmode': 'prefer'},
+    }
+}
 
 
 # Password validation
@@ -136,3 +158,42 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Third-party API settings
 # Visual Crossing Weather API key
 VISUALCROSSING_WEATHER_API_KEY = 'L8F7FT8G6BFFSAUAPWFBZVL8B'
+
+# User activity tracking
+TRACK_USER_ACTIVITY = True
+USER_ACTIVITY_RETENTION_DAYS = 30  # How many days to keep user activity logs
+
+# Logging configuration
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
+            'style': '{',
+        },
+        'simple': {
+            'format': '{levelname} {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'console': {
+            'level': 'INFO',
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+    },
+}
+
+# Authentication settings
+LOGIN_URL = '/users/login/'
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
