@@ -127,35 +127,6 @@ The Smart Travel system includes scripts for hosting on a Linux server:
    chmod +x stop_hosting.sh
    ./stop_hosting.sh
    ```
-
-5. **Configure Nginx (recommended)**
-   - Install Nginx: `sudo apt install nginx`
-   - Create a configuration file in `/etc/nginx/sites-available/`
-   - Set up a proxy to your Gunicorn server
-   - Enable the site and restart Nginx
-
-   Example Nginx configuration:
-   ```nginx
-   server {
-       listen 80;
-       server_name yourdomain.com;
-
-       location /static/ {
-           alias /path/to/SMARTTRAVEL/travel_planner/staticfiles/;
-       }
-
-       location /media/ {
-           alias /path/to/SMARTTRAVEL/travel_planner/media/;
-       }
-
-       location / {
-           proxy_pass http://127.0.0.1:8000;
-           proxy_set_header Host $host;
-           proxy_set_header X-Real-IP $remote_addr;
-       }
-   }
-   ```
-
 ## 🔧 Troubleshooting
 
 - **Python command not found**
