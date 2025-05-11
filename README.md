@@ -1,10 +1,12 @@
 # Smart Travel Planning and Recommendation System
 
-A web-based platform that helps users plan their trips efficiently with personalized recommendations based on user preferences, budget, and real-time travel data.
+A comprehensive web-based platform that helps users plan their trips efficiently with personalized recommendations based on preferences, budget, and real-time travel data.
 
-## 📋 Quick Setup for Windows Users
+## 📋 Quick Setup
 
-### Prerequisites
+### Windows Users
+
+#### Prerequisites
 1. **Install Python 3.8 or newer**
    - Download from [python.org](https://www.python.org/downloads/)
    - ✅ **IMPORTANT**: Check "Add Python to PATH" during installation
@@ -21,168 +23,262 @@ A web-based platform that helps users plan their trips efficiently with personal
      - Keep default port (5432)
      - Complete the installation
 
-### Setup Steps
-1. **Open Command Prompt**
-   - Press `Win+R`, type `cmd`, and press Enter
-
-2. **Clone the Repository**
+#### Setup Options
+1. **Automated Setup (Recommended)**
    ```cmd
    git clone https://github.com/KomaiX512/SMARTTRAVEL.git
    cd SMARTTRAVEL
-   ```
-
-3. **Run Automated Setup**
-   ```cmd
    auto_setup.bat
    ```
-   This script will:
-   - Create a virtual environment
-   - Install all dependencies
-   - Create the PostgreSQL database
-   - Set up the database schema
-   - Load sample data
-   - Create an admin user
-   - Start the development server
+   This script will set up everything with default values and start the server.
 
-4. **Access the Website**
+2. **Interactive Setup**
+   ```cmd
+   git clone https://github.com/KomaiX512/SMARTTRAVEL.git
+   cd SMARTTRAVEL
+   setup.bat
+   ```
+   This script provides prompts and allows you to customize the installation.
+
+### Linux/Mac Users
+
+#### Prerequisites
+1. **Install Python 3.8 or newer**
+   ```bash
+   # Ubuntu/Debian
+   sudo apt update
+   sudo apt install python3 python3-pip python3-venv
+
+   # macOS (with Homebrew)
+   brew install python3
+   ```
+
+2. **Install PostgreSQL**
+   ```bash
+   # Ubuntu/Debian
+   sudo apt install postgresql postgresql-contrib
+
+   # macOS
+   brew install postgresql
+   brew services start postgresql
+   ```
+
+#### Setup Options
+1. **Automated Setup (Recommended)**
+   ```bash
+   git clone https://github.com/KomaiX512/SMARTTRAVEL.git
+   cd SMARTTRAVEL
+   chmod +x auto_setup.sh
+   ./auto_setup.sh
+   ```
+
+2. **Interactive Setup**
+   ```bash
+   git clone https://github.com/KomaiX512/SMARTTRAVEL.git
+   cd SMARTTRAVEL
+   chmod +x setup.sh
+   ./setup.sh
+   ```
+
+## 💻 Accessing the Application
+
+After setup completes:
+
+1. **Local Development**
    - Open your browser to: http://127.0.0.1:8000/
    - Admin dashboard: http://127.0.0.1:8000/admin-dashboard/
+   - Django admin: http://127.0.0.1:8000/admin/
 
-5. **Default Login Credentials**
+2. **Default Login Credentials**
    - Regular user: username `user1`, password `password123`
    - Admin user: username `admin`, password `admin`
 
-### Troubleshooting
-- **"'python' is not recognized as an internal or external command"**
-  - Make sure Python is installed and added to PATH
-  - Try using `py` instead of `python`
+## 🚀 Hosting the Application
+
+### Production Hosting
+
+The Smart Travel system includes scripts for hosting on a Linux server:
+
+1. **Prepare your server**
+   - Ensure PostgreSQL is installed and running
+   - Clone the repository to your server
+
+2. **Configure settings**
+   - Update `travel_planner/travel_planner/settings.py`:
+     - Set `DEBUG = False`
+     - Update `ALLOWED_HOSTS` with your domain
+     - Configure database settings for production
+
+3. **Start the hosting service**
+   ```bash
+   cd SMARTTRAVEL/travel_planner
+   chmod +x start_hosting.sh
+   ./start_hosting.sh
+   ```
+   This will:
+   - Collect static files
+   - Apply migrations
+   - Start the application with Gunicorn
+   - Run in the background with a PID file for management
+
+4. **Stop the hosting service**
+   ```bash
+   cd SMARTTRAVEL/travel_planner
+   chmod +x stop_hosting.sh
+   ./stop_hosting.sh
+   ```
+
+5. **Configure Nginx (recommended)**
+   - Install Nginx: `sudo apt install nginx`
+   - Create a configuration file in `/etc/nginx/sites-available/`
+   - Set up a proxy to your Gunicorn server
+   - Enable the site and restart Nginx
+
+   Example Nginx configuration:
+   ```nginx
+   server {
+       listen 80;
+       server_name yourdomain.com;
+
+       location /static/ {
+           alias /path/to/SMARTTRAVEL/travel_planner/staticfiles/;
+       }
+
+       location /media/ {
+           alias /path/to/SMARTTRAVEL/travel_planner/media/;
+       }
+
+       location / {
+           proxy_pass http://127.0.0.1:8000;
+           proxy_set_header Host $host;
+           proxy_set_header X-Real-IP $remote_addr;
+       }
+   }
+   ```
+
+## 🔧 Troubleshooting
+
+- **Python command not found**
+  - Windows: Make sure Python is added to PATH
+  - Linux/Mac: Try using `python3` instead of `python`
 
 - **Database connection issues**
-  - Verify PostgreSQL is running (check Services)
-  - Make sure password is set to "postgres"
+  - Verify PostgreSQL is running
+  - Check database settings in `settings.py`
+  - Ensure password is correct
 
 - **Port already in use**
   - Change the port: `python manage.py runserver 8080`
 
-## For Linux/Mac Users
+- **Migration errors**
+  - Try resetting migrations: `python manage.py migrate --fake-initial`
 
-For non-Windows users, follow these alternatives:
+- **Static files not loading in production**
+  - Run `python manage.py collectstatic`
+  - Check Nginx configuration
 
-### Option 1: Interactive Setup
-```bash
-# Clone the repository
-git clone https://github.com/KomaiX512/SMARTTRAVEL.git
-cd SMARTTRAVEL
+## 📝 Documentation
 
-# Run the interactive setup script
-./setup.sh
+### User Documentation
+For users and administrators, please refer to the detailed guides in the application's "About" and "Help" sections.
+
+### Developer Documentation
+For developers, a comprehensive technical documentation is available in [DEVELOPER_DOCUMENTATION.md](DEVELOPER_DOCUMENTATION.md). This includes:
+
+- System architecture
+- Database schema
+- API endpoints
+- Frontend implementation
+- Development workflow
+- Deployment instructions
+
+## ✨ Features
+
+- **User Management**
+  - Registration, authentication, and profile management
+  - Travel preferences and personalization
+
+- **Destinations**
+  - Browse and search destinations
+  - Filter by region, budget, and activities
+  - View detailed information with weather data
+
+- **Trip Planning**
+  - Create and manage trips
+  - Build detailed itineraries
+  - Accommodation booking
+  - Transportation management
+
+- **Bookings and Tickets**
+  - Hotel and transportation booking
+  - E-ticket generation
+  - Payment tracking (simulation)
+
+- **Reviews and Ratings**
+  - Rate and review destinations, accommodations, and attractions
+  - Read other users' reviews
+
+- **Team and Contact**
+  - About our team members
+  - Contact form for inquiries
+  - Company information
+
+- **Admin Dashboard**
+  - User statistics and analytics
+  - Content management
+  - Booking oversight
+
+## 🔄 Recent Updates
+
+- Added comprehensive developer documentation
+- Created automated setup scripts for Windows and Linux
+- Enhanced contact page with team member information and images
+- Improved database handling with PostgreSQL support
+- Added hosting scripts for production deployment
+- Enhanced UI/UX with responsive design improvements
+
+## 🛠 Technologies Used
+
+- **Backend**: Django 5.2, Python 3.8+
+- **Database**: PostgreSQL, Django ORM
+- **Frontend**: HTML5, CSS3, JavaScript, Bootstrap 5
+- **APIs**: Visual Crossing Weather API
+- **Real-time**: Django Channels, EventStream
+- **Server**: Gunicorn, Nginx (production)
+- **Utilities**: FontAwesome, jQuery
+
+## 📂 Project Structure
+
+```
+SMARTTRAVEL/
+├── auto_setup.bat          # Automated setup for Windows
+├── auto_setup.sh           # Automated setup for Linux/Mac
+├── setup.bat               # Interactive setup for Windows
+├── setup.sh                # Interactive setup for Linux/Mac
+├── DEVELOPER_DOCUMENTATION.md  # Technical documentation
+├── README.md               # This file
+└── travel_planner/         # Main Django project
+    ├── travel_planner/     # Project configuration
+    ├── users/              # User management app
+    ├── destinations/       # Destinations app
+    ├── bookings/           # Bookings & trips app
+    ├── reviews/            # Reviews app
+    ├── templates/          # HTML templates
+    ├── static/             # Static files
+    ├── media/              # User-uploaded content
+    ├── manage.py           # Django management script
+    ├── start_hosting.sh    # Production hosting script
+    ├── stop_hosting.sh     # Stop hosting script
+    └── sample_data.py      # Sample data loader
 ```
 
-### Option 2: Automated Setup
-```bash
-# Clone the repository
-git clone https://github.com/KomaiX512/SMARTTRAVEL.git
-cd SMARTTRAVEL
-
-# Run the non-interactive setup script
-./auto_setup.sh
-```
-
-## Manual Setup
-
-If you prefer to set up the project manually, follow these steps:
-
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/KomaiX512/SMARTTRAVEL.git
-   cd SMARTTRAVEL/travel_planner
-   ```
-
-2. Create a virtual environment and activate it:
-   - Windows: 
-     ```cmd
-     python -m venv venv
-     venv\Scripts\activate
-     ```
-   - Mac/Linux:
-     ```bash
-     python3 -m venv venv
-     source venv/bin/activate
-     ```
-
-3. Install dependencies:
-   ```
-   pip install -r requirements.txt
-   ```
-
-4. Set up PostgreSQL:
-   - Install PostgreSQL if not already installed
-   - Create a database named 'travel_planner'
-   - Set database settings in `travel_planner/settings.py`
-
-5. Run migrations:
-   ```
-   python manage.py migrate
-   ```
-
-6. Load sample data:
-   ```
-   python manage.py shell < sample_data.py
-   ```
-
-7. Create a superuser:
-   ```
-   python manage.py createsuperuser
-   ```
-
-8. Run the development server:
-   ```
-   python manage.py runserver
-   ```
-
-## Features
-
-- User registration and profile management
-- Travel preference settings
-- Destination discovery and recommendations
-- Accommodation and attraction information
-- Real-time weather information and forecasts
-- Trip planning and itinerary creation
-- Booking management
-- User reviews and ratings
-- Custom admin dashboard for site management
-
-## Technologies Used
-
-- Django 5.2 (Python web framework)
-- PostgreSQL (Database)
-- HTML/CSS (Frontend)
-- Bootstrap 5 (UI Framework)
-- Django Channels (Real-time functionality)
-- Django EventStream (Server-Sent Events)
-
-## Project Structure
-
-- `users/`: User profiles and preferences
-- `destinations/`: Destinations, accommodations, attractions, and weather
-- `bookings/`: Trip planning and booking management
-- `reviews/`: User reviews and ratings
-- `travel_planner/`: Main project files and settings
-
-## Key URLs
-
-After starting the server, access these pages:
-
-- Home page: http://127.0.0.1:8000/
-- Admin dashboard: http://127.0.0.1:8000/admin-dashboard/
-- Django admin: http://127.0.0.1:8000/admin/
-- Destinations page: http://127.0.0.1:8000/destinations/
-
-## License
+## 📜 License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
 
-## Acknowledgements
+## 🙏 Acknowledgements
 
 - Weather data provided by [Visual Crossing Weather API](https://www.visualcrossing.com/)
-- Images from [Unsplash](https://unsplash.com/) 
+- Images from [Unsplash](https://unsplash.com/)
+- Icons from [FontAwesome](https://fontawesome.com/)
+- UI framework by [Bootstrap](https://getbootstrap.com/) 
